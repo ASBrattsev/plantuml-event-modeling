@@ -315,6 +315,7 @@ The variables can be mutated using $_get, $_set, and $_exists
     $_set($_laneTypeOrder(1), "wireframe")
     $_set($_laneTypeOrder(2), "commandview")
     $_set($_laneTypeOrder(3), "event")
+    $_set($_laneTypeOrder(4), "sideeffect")
     $_set($_laneTypeOrderMaxIndex, 3)
 !endprocedure
 $_autoConfigureLaneTypes()
