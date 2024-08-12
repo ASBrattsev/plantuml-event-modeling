@@ -701,12 +701,12 @@ $_autoConfigureLaneTypes()
 !endprocedure
 
 !unquoted procedure $secondarycommand($name, $laneAlias, $offset = 0, $arrow = 1, $alias = "", $figure = $default_figure)
-    !$laneIndex = $_lookupLaneIndex("secondarycommand", $laneAlias)
+    !$laneIndex = $_lookupLaneIndex("secondarycommandview", $laneAlias)
     $_addNode("secondarycommandview", $laneIndex, $name, $alias, $figure, "command", $offset, $arrow)
 !endprocedure
 
 !unquoted procedure $secondaryview($name, $laneAlias, $offset = 0, $arrow = 1, $alias = "", $figure = $default_figure)
-    !$laneIndex = $_lookupLaneIndex("secondarycommand", $laneAlias)
+    !$laneIndex = $_lookupLaneIndex("secondarycommandview", $laneAlias)
     $_addNode("secondarycommandview", $laneIndex, $name, $alias, $figure, "view", $offset, $arrow)
 !endprocedure
 
