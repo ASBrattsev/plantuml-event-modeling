@@ -315,7 +315,7 @@ The variables can be mutated using $_get, $_set, and $_exists
     $_set($_laneTypeOrder(1), "wireframe")
     $_set($_laneTypeOrder(2), "commandview")
     $_set($_laneTypeOrder(3), "event")
-    $_set($_laneTypeOrder(4), "sideeffect")
+    $_set($_laneTypeOrder(4), "secondarycommandview")
     $_set($_laneTypeOrderMaxIndex, 4)
 !endprocedure
 $_autoConfigureLaneTypes()
@@ -650,6 +650,18 @@ $_autoConfigureLaneTypes()
     $_configureLane("event", $laneIndex, $laneAlias, $headingName, $event_heading_default_figure, "concept", $headingAlias, $context)
 !endprocedure
 
+!unquoted procedure $configureSecondaryCommandLane($laneAlias, $headingName = "", $headingAlias = "", $context = "")
+    !if $headingName == ""
+        !$headingName = $laneAlias
+    !endif
+    !$laneAlias = $_createOrVerifyAlias($laneAlias)
+    !if $headingAlias == ""
+        !$headingAlias = $laneAlias + "heading"
+    !endif
+    !$headingAlias = $_createOrVerifyAlias($headingName, $headingAlias)
+    !$laneIndex = $_lookupLaneIndex("secondarycommandview", $laneAlias)
+    $_configureLane("secondarycommandview", $laneIndex, $laneAlias, $headingName, $event_heading_default_figure, "system", $headingAlias, $context)
+!endprocedure
 /'
 **************** Public procedures to record nodes and arrows *********************
 '/
@@ -686,6 +698,16 @@ $_autoConfigureLaneTypes()
 
 !unquoted procedure $arrow($from, $to)
     $_addArrow($from, $to, defaultarrow)
+!endprocedure
+
+!unquoted procedure $secondarycommand($name, $laneAlias, $offset = 0, $arrow = 1, $alias = "", $figure = $default_figure)
+    !$laneIndex = $_lookupLaneIndex("secondarycommand", $laneAlias)
+    $_addNode("secondarycommandview", $laneIndex, $name, $alias, $figure, "command", $offset, $arrow)
+!endprocedure
+
+!unquoted procedure $secondaryview($name, $laneAlias, $offset = 0, $arrow = 1, $alias = "", $figure = $default_figure)
+    !$laneIndex = $_lookupLaneIndex("secondarycommand", $laneAlias)
+    $_addNode("secondarycommandview", $laneIndex, $name, $alias, $figure, "view", $offset, $arrow)
 !endprocedure
 
 /'
