@@ -316,7 +316,8 @@ The variables can be mutated using $_get, $_set, and $_exists
     $_set($_laneTypeOrder(2), "commandview")
     $_set($_laneTypeOrder(3), "event")
     $_set($_laneTypeOrder(4), "secondarycommandview")
-    $_set($_laneTypeOrderMaxIndex, 4)
+    $_set($_laneTypeOrder(5), "extrabottom")
+    $_set($_laneTypeOrderMaxIndex, 5)
 !endprocedure
 $_autoConfigureLaneTypes()
 
@@ -668,6 +669,10 @@ $_autoConfigureLaneTypes()
 
 !unquoted procedure $extra($name, $offset = 0, $arrow = 1, $alias = "", $figure = $default_figure)
     $_addNode("extra", 0, $name, $alias, $figure, "extra", $offset, $arrow)
+!endprocedure
+
+!unquoted procedure $extrabottom($name, $offset = 0, $arrow = 1, $alias = "", $figure = $default_figure)
+    $_addNode("extrabottom", 0, $name, $alias, $figure, "extra side", $offset, $arrow)
 !endprocedure
 
 !unquoted procedure $wireframe($name, $laneAlias = "defaultLane", $offset = 0, $arrow = 1, $alias = "", $figure = $default_figure)
