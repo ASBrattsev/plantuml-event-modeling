@@ -701,8 +701,8 @@ $_autoConfigureLaneTypes()
     $_addArrow($from, $to, eventarrow)
 !endprocedure
 
-!unquoted procedure $arrow($from, $to)
-    $_addArrow($from, $to, defaultarrow)
+!unquoted procedure $arrow($from, $to, $type = defaultarrow)
+    $_addArrow($from, $to, $type)
 !endprocedure
 
 !unquoted procedure $secondarycommand($name, $laneAlias, $offset = 0, $arrow = 1, $alias = "", $figure = $default_figure)
