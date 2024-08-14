@@ -145,6 +145,20 @@ The variables can be mutated using $_get, $_set, and $_exists
 /'
 **************** Utility functions *********************
 '/
+!function $_whileRenderNodesForLane($itemIndex, $itemMaxIndex, $flip)
+!if $flip == 0
+    !return $itemIndex <= $itemMaxIndex
+!else
+    !return $itemIndex >= 0
+!endif
+!endfunction
+!function $_incrementRenderNodesForLane($itemIndex, $flip)
+!if $flip == 0
+    !return $itemIndex + 1
+!else
+    !return $itemIndex - 1
+!endif
+!endfunction
 !function $_get($varName)
     !return %get_variable_value($varName)
 !endfunction
@@ -477,10 +491,14 @@ $_autoConfigureLaneTypes()
 /'
 **************** Private procedures to render nodes, lanes, and arrows *********************
 '/
-!procedure $_renderNodesForLane($laneType, $laneIndex, $itemMaxIndex)
+!procedure $_renderNodesForLane($laneType, $laneIndex, $itemMaxIndex, $flip = 0)
     ' Render in forward order for correct left-to-right display
-    !$itemIndex = 0
-    !while $itemIndex <= $itemMaxIndex
+    !if $flip == 0
+        !$itemIndex = 0
+    !else
+        !$itemIndex = $itemMaxIndex
+    !endif
+    !while $_whileRenderNodesForLane($itemIndex, $itemMaxIndex, $flip)
         ' Fetch node data
         !$name = $_get($_node($laneType, $laneIndex, $itemIndex, "name"))
         !$alias = $_get($_node($laneType, $laneIndex, $itemIndex, "alias"))
@@ -494,7 +512,7 @@ $_autoConfigureLaneTypes()
         !endif
         $figure "$name" as $alias $stereotypePart
 
-        !$itemIndex = $itemIndex + 1
+        !$itemIndex = $_incrementRenderNodesForLane($itemIndex, $flip)
     !endwhile
 !endprocedure
 
@@ -546,7 +564,7 @@ $_autoConfigureLaneTypes()
     $_set($_previousLaneContext, $contextAlias)
 !endprocedure
 
-!procedure $_renderLanesForType($laneType)
+!procedure $_renderLanesForType($laneType, $flip = 0)
     !$laneIndex = 0
     !$laneMaxIndex = $_getVarOrDefault($_laneMaxIndex($laneType), -1)
     !while $laneIndex <= $laneMaxIndex
@@ -562,7 +580,7 @@ $_autoConfigureLaneTypes()
             ' Render hidden container for all nodes
             !$containerNodeName = "rect-" + $laneType + "-" + $laneIndex
             rectangle $containerNodeName <<hidden>> {
-                $_renderNodesForLane($laneType, $laneIndex, $itemMaxIndex)
+                $_renderNodesForLane($laneType, $laneIndex, $itemMaxIndex, $flip)
                 $_renderLaneInternalArrows($laneType, $laneIndex, $itemMaxIndex)
             }
 
@@ -573,14 +591,14 @@ $_autoConfigureLaneTypes()
     !endwhile
 !endprocedure
 
-!procedure $_renderLaneTypes()
+!procedure $_renderLaneTypes($flip = 0)
     !$laneTypeIndex = 0
     !$laneTypeMaxIndex = $_get($_laneTypeOrderMaxIndex)
     !$laneType = ""
     !while $laneTypeIndex <= $laneTypeMaxIndex
         !$laneType = $_get($_laneTypeOrder($laneTypeIndex))
 
-        $_renderLanesForType($laneType)
+        $_renderLanesForType($laneType, $flip)
 
         !$laneTypeIndex = $laneTypeIndex + 1
     !endwhile
@@ -719,8 +737,8 @@ $_autoConfigureLaneTypes()
 **************** Public procedures to render the recorded nodes *********************
 '/
 
-!procedure $renderEventModelingDiagram()
-    $_renderLaneTypes()
+!procedure $renderEventModelingDiagram($flip = 0)
+    $_renderLaneTypes($flip)
     $_renderArrows()
 !endprocedure
 
